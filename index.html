@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css" />
+
+  <meta charset="utf-8" />
+  <style>
+    body {
+      margin: 0;
+    }
+
+    canvas {
+      background: rgb(244, 244, 9);
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    function sharpener(canvas) {
+      const dpr = window.devicePixelRatio
+      const rect = canvas.getBoundingClientRect()
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      canvas.getContext('2d').scale(dpr, dpr)
+      canvas.style.width = `${rect.width}px`
+      canvas.style.height = `${rect.height}px`
+
+    }
+    console.clear()
+    const ww = window.innerWidth
+    const wh = window.innerHeight
+
+    const canvas = document.querySelector('#canvas');
+    canvas.width = ww
+    canvas.height = wh
+    const ctx = canvas.getContext('2d');
+    sharpener(canvas)
+
+    let a = 0
+    let framesPerSecond = 20;
+    //ctx.translate(ww/2,wh/2)
+
+
+    function move() {
+      setTimeout(function () {
+        ctx.fillStyle = 'rgb(100,100,10)'
+        
+        for (let i = 0; i < 2; i++) {
+
+          
+          let factor = Math.sin(a)
+          factor = (factor + 1) / 2
+          let minsize = 5
+          let size = minsize + 400* factor
+          ctx.save()
+          //ctx.clearRect(0, 0, ww, wh)
+          ctx.translate(ww/2,wh/2)
+         
+          //ctx.fillStyle = 'rgb(100,100,10)'
+          
+          ctx.beginPath()
+          //ctx.fillRect(200, 200, 100, 100);
+          ctx.arc(0, 0, size, 0, Math.PI * 2)
+          //ctx.arc(0, 0, 10, 0, Math.PI * 2)
+         
+          //ctx.fill()
+          console.log(size)
+          a += 1
+          ctx.stroke();
+          ctx.restore()
+          
+        }
+        console.log(a)
+        if (a>1000){
+          ctx.clearRect(0, 0, ww, wh)
+          ctx.fillStyle = 'rgb(100,100,100)'
+          a=0
+
+        }
+
+        //ctx.clearRect(0, 0, ww, wh)
+        
+
+        window.requestAnimationFrame(move)
+      }, 1000 / framesPerSecond)
+      //ctx.clearRect(0, 0, ww, wh)
+    }
+    move()
+
+  </script>
+</body>
+
+
+</html>
